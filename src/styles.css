@@ -296,11 +296,21 @@ body {
 .hero-title {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 500;
-  font-size: clamp(52px, 9.5vw, 138px);
+  font-size: clamp(52px, 7.5vw, 112px);
   line-height: 1.02;
   letter-spacing: 0.015em;
   margin: 22px 0 26px;
   color: var(--ivory);
+}
+
+/* hero — headline owns the left column, the watch floats clear on the right */
+.section--hero {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.section--hero .hero-sub {
+  max-width: 470px;
 }
 
 h2 {
@@ -708,6 +718,12 @@ em {
 
   .header {
     padding: 22px 24px;
+  }
+
+  /* keep the headline in the top half — the watch parks in the bottom half */
+  .section--hero {
+    justify-content: flex-start;
+    padding-top: 14vh;
   }
 
   .section {

@@ -149,10 +149,10 @@ export default function Interface() {
         <p className="footer-line">By appointment only — Genève · Lisboa · Tokyo</p>
         <hr className="footer-rule" />
         <nav className="footer-links">
-          <a href="#care">Care</a>
-          <a href="#warranty">Warranty</a>
-          <a href="#authenticity">Authenticity</a>
-          <a href="#press">Press</a>
+          <a href="mailto:atelier@vanta.swiss?subject=Care">Care</a>
+          <a href="mailto:atelier@vanta.swiss?subject=Warranty">Warranty</a>
+          <a href="mailto:atelier@vanta.swiss?subject=Authenticity">Authenticity</a>
+          <a href="mailto:press@vanta.swiss">Press</a>
         </nav>
         <p className="footer-copy">© VANTA Horlogerie 1947–2026</p>
       </section>

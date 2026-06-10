@@ -353,20 +353,29 @@ function ChimeRing({ lifeRef }: { lifeRef: { current: number } }) {
 
 const ANCHORS = [
   // x is a fraction of viewport width; y a fraction of viewport height
-  { x: 0, y: -0.04, z: 0, rx: 0.14, ry: -0.38, rz: 0.05, s: 1.0 }, // 0 hero — floating, exploded
+  // 0 hero — floating, exploded, parked clear of the headline (set per-viewport below)
+  { x: 0.26, y: -0.02, z: -0.6, rx: 0.14, ry: -0.38, rz: 0.05, s: 0.92 },
   { x: 0.21, y: 0, z: 0.7, rx: 0.1, ry: 0.55, rz: 0, s: 1.05 }, // 1 movement — train assembling
   { x: -0.23, y: 0, z: 0.2, rx: 0.08, ry: -0.62, rz: -0.04, s: 0.95 }, // 2 craft — case furniture
   { x: 0, y: 0.04, z: 1.5, rx: 0, ry: 0, rz: 0, s: 1.12 }, // 3 the watch — complete, frontal
   { x: 0.24, y: 0, z: 0, rx: 0.04, ry: 1.15, rz: 0, s: 0.85 }, // 4 heritage — profile
   { x: 0, y: 0.16, z: -3.4, rx: 0.18, ry: 0.35, rz: 0, s: 0.5 }, // 5 collection — recedes
-  { x: 0, y: 0.02, z: -7.5, rx: 0.26, ry: 0.95, rz: 0, s: 0.3 }, // 6 footer — a memory
+  { x: 0, y: 0.3, z: -7.5, rx: 0.26, ry: 0.95, rz: 0, s: 0.3 }, // 6 footer — a memory, above the line
 ]
+
+// On narrow viewports the right-hand hero park would still cover the
+// centered headline — drop the watch into the lower half instead.
+const HERO_MOBILE = { x: 0, y: -0.36, z: -1.0, rx: 0.14, ry: -0.38, rz: 0.05, s: 0.66 }
 
 function WatchAssembly() {
   const rig = useRef<THREE.Group>(null!)
   const scroll = useScroll()
   const vh = useThree((s) => s.viewport.height)
   const vw = useThree((s) => s.viewport.width)
+  const anchors = useMemo(() => {
+    const isNarrow = vw / vh < 0.9 // portrait-ish viewports
+    return isNarrow ? [HERO_MOBILE, ...ANCHORS.slice(1)] : ANCHORS
+  }, [vw, vh])
 
   const [hovered, setHovered] = useState(false)
   useCursor(hovered)
@@ -381,8 +390,8 @@ function WatchAssembly() {
     const p = THREE.MathUtils.clamp(scroll.offset * (PAGES - 1), 0, PAGES - 1)
     const i = Math.min(Math.floor(p), PAGES - 2)
     const f = THREE.MathUtils.smoothstep(p - i, 0, 1)
-    const a = ANCHORS[i]
-    const b = ANCHORS[i + 1]
+    const a = anchors[i]
+    const b = anchors[i + 1]
     const mix = (ka: number, kb: number) => ka + (kb - ka) * f
 
     // hover hastens the whole movement
@@ -453,7 +462,7 @@ function WatchAssembly() {
 
       {/* ---- GOING TRAIN — three gears at three speeds */}
       <group position={[-0.55, 0.38, 0.04]}>
-        <Part start={0.45} end={1.0} from={[-3.6, 2.3, 4.2]} fromRot={[1.2, 0.7, -0.5]} seed={2}>
+        <Part start={0.45} end={1.0} from={[-4.3, 3.1, 3.4]} fromRot={[1.2, 0.7, -0.5]} seed={2}>
           <Gear radius={0.52} teeth={14} speed={0.55} speedRef={speedRef} />
         </Part>
       </group>
